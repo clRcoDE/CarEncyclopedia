@@ -8,6 +8,7 @@
  */
 
 import React, {Component} from 'react';
+<<<<<<< HEAD
 import {Platform, StyleSheet, Text, View} from 'react-native';
 
 const instructions = Platform.select({
@@ -25,6 +26,16 @@ export default class App extends Component<Props> {
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
+=======
+import {Platform, StyleSheet, Text, View,FlatList} from 'react-native';
+import Corvettes from './src/Components/Corvettes'
+
+export default class App extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+      <Corvettes/>
+>>>>>>> a48356c7cf257d112ca86d0ca61decae9c5b5d95
       </View>
     );
   }
@@ -37,6 +48,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
+<<<<<<< HEAD
   welcome: {
     fontSize: 20,
     textAlign: 'center',
@@ -47,4 +59,6 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+=======
+>>>>>>> a48356c7cf257d112ca86d0ca61decae9c5b5d95
 });
