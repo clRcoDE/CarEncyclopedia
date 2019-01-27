@@ -12,7 +12,7 @@ export default Data = [
 
     },
     {
-        name:'Corvette C3',
+        name:'Corvette C3R',
         build:'Cheverlet',
         startyear:'1972',
             endyear:'1984',
@@ -34,7 +34,7 @@ export default Data = [
 
 },
 {
-    name:'Corvette C4',
+    name:'Corvette C4RS',
     build:'Cheverlet',
     startyear:'1986',
             endyear:'1996',

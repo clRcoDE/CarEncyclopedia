@@ -27,13 +27,15 @@ export default class Corvettes extends Component {
   UpAndFade() {
     this.state.upOpacity.setValue(0);
     this.state.upMove.setValue(0);
-
-    Animated.parallel([
-      Animated.timing(this.state.upOpacity, { toValue: 1, duration: 500 }),
-      Animated.timing(this.state.upMove, {
-        toValue: 1,
-        duration: 500
-      })
+    Animated.sequence([
+      Animated.timing(this.state.upOpacity, { toValue: 0, duration: 100 }),
+      Animated.parallel([
+        Animated.timing(this.state.upOpacity, { toValue: 1, duration: 750 }),
+        Animated.timing(this.state.upMove, {
+          toValue: 1,
+          duration: 750
+        })
+      ])
     ]).start();
   }
   onScroller(event) {
@@ -78,6 +80,12 @@ export default class Corvettes extends Component {
     const marginRighter = this.state.upMove.interpolate({
       inputRange: [0, 1],
       outputRange: [0, 5]
+    });
+
+    const opacityRR = position.interpolate({
+      inputRange: [0, 1, 2],
+      outputRange: [0.3, 1, 0],
+      extrapolate: "extend"
     });
 
     return (
@@ -154,21 +162,22 @@ export default class Corvettes extends Component {
                       <View
                         style={{
                           flexDirection: "row",
-                          borderColor: "green",
-                          borderWidth: 3
+                          borderColor: "red",
+                          borderWidth: 3,
+                          height: 75
                         }}
                       >
                         {Data.map((cars, i) => {
-                          var opacity = position.interpolate({
+                          const opacity = position.interpolate({
                             inputRange: [i - 1, i, i + 1],
                             outputRange: [0.3, 1, 0],
                             extrapolate: "extend"
                           });
-                          var fontSizer = position.interpolate({
+                          const fontSizer = position.interpolate({
                             inputRange: [i - 1, i, i + 1],
                             outputRange: [25, 50, 25]
                           });
-                          var topPadder = position.interpolate({
+                          const topPadder = position.interpolate({
                             inputRange: [i - 1, i, i + 1],
                             outputRange: [0, 10, 0]
                           });
@@ -204,26 +213,80 @@ export default class Corvettes extends Component {
                         })}
                       </View>
                       <View style={styles.mainInfo}>
-                        <View style={styles.pagerCount}>
-                          {Data.map((item, index) => {
-                            // var opacity = position.interpolate({
-                            //   inputRange: [index - 1, index, index + 1],
-                            //   outputRange: [0.3, 1, 0],
-                            //   extrapolate: "extend"
-                            // });
+                        <Animated.View style={styles.pagerCount}>
+                          {Data.map((item, i) => {
+                            const opacityRR = position.interpolate({
+                              inputRange: [i - 1, i, i + 1],
+                              outputRange: [0.5, 1, 0.5],
+                              extrapolate: "clamp"
+                            });
                             return (
-                              <View key={index}
-                                style={{ borderColor: "gold", borderWidth: 4 }}
+                              <Animated.View
+                                key={i}
+                                style={{
+                                  borderColor: "gold",
+                                  borderWidth: 3,
+                                  // opacity: this.state.upOpacity,
+                                  opacity: opacityRR,
+                                  padding: 5,
+                                  justifyContent: "space-evenly",
+                                  alignItems: "center"
+                                }}
                               >
-                                <Text style={{opacity:0.5,color:'#eee'}}>{item.key}</Text>
-                              </View>
+                                <Animated.Text
+                                  style={{
+                                    color: "#eee",
+                                    transform: [{ scaleY: 1.3 }],
+                                    fontSize: 16
+                                  }}
+                                >
+                                  {item.key}
+                                </Animated.Text>
+                                <Animated.View
+                                  style={{
+                                    width: 5,
+                                    height: 5,
+                                    borderRadius: 50,
+                                    backgroundColor: "#fff"
+                                  }}
+                                />
+                              </Animated.View>
                             );
                           })}
+                        </Animated.View>
+
+                        <Animated.View
+                          style={[
+                            styles.carName,
+                            {
+                              paddingBottom: marginToper,
+                              opacity: this.state.upOpacity
+                            }
+                          ]}
+                        >
+                          <Animated.Text style={styles.nameTxt}>
+                            {item.build}
+                          </Animated.Text>
+                          <Animated.Text style={styles.nameTxt}>
+                            {item.name}
+                          </Animated.Text>
+                        </Animated.View>
+                        <View style={styles.descriptionPart}>
+                          <View style={styles.productionView}>
+                            <Text style={styles.ProductHistory}>
+                              Production
+                            </Text>
+                            <Text style={styles.ProductHistory}>
+                              {item.startyear} - {item.endyear}
+                            </Text>
                           </View>
-                          <View style={styles.carName}><Text style={styles.nameTxt}>{item.build}</Text><Text style={styles.nameTxt}>{item.name}</Text></View>
+                          <View style={styles.decsiptionView}>
+                          <Text style={{borderWidth:2,borderColor:'dodgerblue'}}>{item.description}</Text>
+                          </View>
                         </View>
                       </View>
                     </View>
+                  </View>
                   <View
                     style={{
                       width: 150,
@@ -248,8 +311,8 @@ const styles = StyleSheet.create({
   },
   carsImages: {
     width: deviceWidth,
-    height: deviceHeight-100,
-    position: "absolute",
+    height: deviceHeight - 125,
+    position: "absolute"
   },
   imageWrapper: {
     // width:600,
@@ -257,7 +320,6 @@ const styles = StyleSheet.create({
     // position: 'absolute',
     width: deviceWidth,
     // height:deviceHeight,
-    
 
     borderColor: "red",
     // borderWidth: 5,
@@ -297,7 +359,7 @@ const styles = StyleSheet.create({
     borderColor: "blue",
     flex: 1,
     justifyContent: "space-between",
-    marginBottom: 150
+    marginBottom: 125
   },
   mainInfo: {
     borderColor: "red",
@@ -308,16 +370,44 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     flexDirection: "row"
   },
-  nameTxt:{
-    color:'rgba(200,200,200,0.7)',
-    fontFamily:'serif',
-    fontWeight:'800',
-    fontSize:45
+  nameTxt: {
+    color: "rgba(200,200,200,0.7)",
+    fontFamily: "serif",
+    fontWeight: "800",
+    fontSize: 38
   },
-  carName:{
-    borderColor:'gold',
+  carName: {
+    borderColor: "gold",
+    borderWidth: 3,
+    borderBottomColor: "#777",
+    borderBottomWidth: 6
+  },
+  descriptionPart: {
+    borderColor: "lime",
+    borderWidth: 3,
+    height: 65,
+    justifyContent: "center",
+    flexDirection:'row',
+    // flex:1
+  },
+  ProductHistory: {
+    fontSize: 14,
+    color: "#eee",
+    borderColor:'red',
+    borderWidth:3
+  },
+  productionView: {
+    backgroundColor: "purple",
     borderWidth:3,
-    borderBottomColor:'#777',
-    borderBottomWidth: 6,
+    flex:1
+  },
+  decsiptionView:{
+    backgroundColor:'gold',
+    borderWidth:3,
+    flex:1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    flexDirection:"row"
   }
 });
