@@ -8,7 +8,8 @@ import {
   ScrollView,
   TouchableHightlight,
   Animated,
-  Dimensions
+  Dimensions,
+  LayoutAnimation
 } from "react-native";
 import Data from "./Data";
 
@@ -17,35 +18,117 @@ let deviceHeight = Dimensions.get("window").height;
 export default class Corvettes extends Component {
   constructor(props) {
     super(props);
+    this.duration = 500;
     this.state = {
       scrollX: new Animated.Value(0),
       upMove: new Animated.Value(0),
-      upOpacity: new Animated.Value(0)
+      upOpacity: new Animated.Value(0),
+      Xtransform:new Animated.Value(0)
     };
   }
 
+  flatlistHeader = () => {
+    return (
+      <View
+        style={{
+          borderColor: "gold",
+          borderWidth: 4,
+          borderRadius: 6,
+          width: deviceWidth,
+          height: deviceHeight,
+          backgroundColor: "#333",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <View
+          style={{
+            borderColor: "dodgerblue",
+            borderWidth: 4,
+            borderRadius: 6,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <Text style={{ fontFamily: "serif", color: "#fff", fontSize: 30 }}>
+            WELCOME TO GRAND HALL OF HISTORICAL CORVETTES
+          </Text>
+        </View>
+      </View>
+    );
+  };
+  // clearAnimate(){
+  //   Animated.timing(this.state.upOpacity, { toValue: 0, duration: 500 })
+
+  // }
+
+  // showmenu() {
+  //   this.setState({ showNav: !this.state.showNav });
+  // }
+
+  // clearView(){
+  //   Animated.timing(this.state.upOpacity, { toValue: 0.0, duration:25,useNativeDriver:true }).start()
+  // }
   UpAndFade() {
-    this.state.upOpacity.setValue(0);
-    this.state.upMove.setValue(0);
+    
+    // this.state.upOpacity.setValue(0);
+    // this.state.upMove.setValue(0);
+    // this.state.Xtransform.setValue(0)
     Animated.sequence([
-      Animated.timing(this.state.upOpacity, { toValue: 0, duration: 100 }),
+      Animated.timing(this.state.upOpacity, { toValue: 0, duration: 100 ,useNativeDriver:true}),
+      Animated.timing(this.state.Xtransform, { toValue: 0, duration: 50 ,useNativeDriver:true}),
       Animated.parallel([
-        Animated.timing(this.state.upOpacity, { toValue: 1, duration: 750 }),
+      Animated.timing(this.state.Xtransform,{toValue:50,duration:500,useNativeDriver:true}),
+
+        Animated.timing(this.state.upOpacity, { toValue: 1, duration:1000,useNativeDriver:true }),
         Animated.timing(this.state.upMove, {
           toValue: 1,
-          duration: 750
-        })
-      ])
+          duration:1000,
+          useNativeDriver:true
+        }),
+        
+      ]),
+      
     ]).start();
   }
-  onScroller(event) {
-    Animated.event([
-      ({ nativeEvent }) => {
-        this.setState({ scrollX: nativeEvent.contentOffset.x });
-      },
-      console.warn("hello")
-    ])(event);
-  }
+
+  // configlayouts = {
+  //   create: {
+  //     type: "spring",
+  //     springDamping: 0.5,
+  //     property: "scaleXY",
+  //     duration: 1000
+  //   },
+  //   update: {
+  //     type: "spring",
+  //     springDamping: 0.5,
+  //     property: "scaleXY",
+  //     duration: 1000
+  //   },
+  //   delete: {
+  //     type: "spring",
+  //     springDamping: 0.5,
+  //     property: "scaleXY",
+  //     duration: 1000
+  //   }
+  // };
+  // bolup = () => {
+  //   LayoutAnimation.configureNext(this.configlayouts);
+  //   this.setState(prev => ({ showHeader: !prev.showHeader }));
+  // };
+  // onScroller(event) {
+  //   Animated.event([
+  //     ({ nativeEvent }) => {
+  //       this.setState({ scrollX: nativeEvent.contentOffset.x });
+  //     },
+  //     console.warn("hello")
+  //   ])(event);
+  // }
+
+  // logger(){
+  //   setInterval(console.warn('second'),2000)
+  // }
+ 
 
   componentDidMount() {
     this.UpAndFade();
@@ -54,7 +137,7 @@ export default class Corvettes extends Component {
   render() {
     let scrollIndicator = Data;
     // let position = Animated.divide(this.state.scrollX , deviceWidth);
-    // let positionIndex = Math.round(this.state.scrollX/deviceWidth) || 0 ;
+    // let position = Math.round(this.state.scrollX/deviceWidth) || 0 ;
     // this.setState({animatedPosition:positionIndex})
     // console.warn(positionIndex)
     let position = Animated.divide(this.state.scrollX, deviceWidth);
@@ -90,51 +173,164 @@ export default class Corvettes extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={styles.pageHeader}>
-          <Text style={{ color: "#fff", fontSize: 18, fontWeight: "600" }}>
-            Timeline
-          </Text>
-        </View>
-        <Animated.View style={styles.flatlistContainer}>
-          <FlatList
-            data={Data}
-            horizontal
-            pagingEnabled
-            scrollEventThrottle={10}
-            // onScroll={Animated.event([({ nativeEvent }) => {this.setState({ scrollX: nativeEvent.contentOffset.x }); } ,console.warn('hello') ])(event)}
+        {/* <ScrollView
+          scrollEventThrottle={10}
+          // onScroll={({ nativeEvent }) => {
+          //   this.setState({ scrollY: nativeEvent.contentOffset.y }, () => {
+          //     this.bolup();
+          //   });
+          // }}
+          pagingEnabled
+        > */}
+          {/* <ScrollView pagingEnabled horizontal>
 
-            // onScroll={this.onScroller.bind(this)}
+          <View
+                style={{
+                  position: "absolute",
+                  zIndex: 6,
+                  backgroundColor: "rgba(100,100,200,0.5)",
+                  borderRadius: 50,
+                  top: 200,
+                  left: 200
+                }}
+              >
+                <Text
+                  style={{ color: "#fff" , position: "absolute",
+                  zIndex: 6,
+                  backgroundColor: "rgba(100,100,200,0.5)",
+                  borderRadius: 50,
+                  top: 200,
+                  left: 200}}
+                  onPress={this.showmenu.bind(this)}
+                >
+                  hello
+                </Text>
+              </View> */}
 
-            onScroll={({ nativeEvent }) => {
-              this.setState({ scrollX: nativeEvent.contentOffset.x }, () => {
-                this.UpAndFade();
-              });
-            }}
-            // onScroll={ Animated.event([({ nativeEvent }) => {
-            //   this.setState({ scrollX: nativeEvent.contentOffset.x });
-            // },])     }
+            {/* {this.state.showNav &&
+              <Animated.View
+                style={{
+                  borderColor: "gold",
+                  borderWidth: 4,
+                  borderRadius: 6,
+                  width: deviceWidth * (50 / 100),
+                  height: deviceHeight,
+                  backgroundColor: "royalblue",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <View
+                  style={{
+                    position: "absolute",
+                    zIndex: 6,
+                    backgroundColor: "black",
+                    borderRadius: 50,
+                    top: 200,
+                    left: 200
+                  }}
+                >
+                  <Text
+                    style={{ color: "#fff" }}
+                    onPress={this.showmenu.bind(this)}
+                  >
+                    hello
+                  </Text>
+                </View>
+              </Animated.View>
+            } */}
 
-            // onScroll={Animated.event([
-            //   (({ nativeEvent }) => {
-            //       this.setState({ scrollX: nativeEvent.contentOffset.x });
-            //     })])}
+            {/* <Animated.View>
+              <Animated.View
+                style={{
+                  borderColor: "gold",
+                  borderWidth: 4,
+                  borderRadius: 6,
+                  width: deviceWidth,
+                  height: deviceHeight,
+                  backgroundColor: "#333",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Animated.View
+                  style={{
+                    borderColor: "dodgerblue",
+                    borderWidth: 4,
+                    borderRadius: 6,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <Animated.Text
+                    style={{ fontFamily: "serif", color: "#fff", fontSize: 30 }}
+                  >
+                    WELCOME TO GRAND HALL OF HISTORICAL CORVETTES
+                  </Animated.Text>
+                </Animated.View>
+              </Animated.View>
+            </Animated.View> */}
+         
+          <Animated.View style={styles.flatlistContainer}>
+            <FlatList
+              data={Data}
+              // ListHeaderComponent={this.flatlistHeader}
+              horizontal
+              pagingEnabled
+              scrollEventThrottle={10}
+              // onScroll={Animated.event([({ nativeEvent }) => {this.setState({ scrollX: nativeEvent.contentOffset.x }); } ,console.warn('hello') ])(event)}
 
-            keyExtractor={item => item.key}
-            renderItem={({ item }) => {
-              return (
-                <Animated.View key={item} style={styles.flatlistPage}>
-                  <View style={styles.imageWrapper}>
-                    <Image source={item.image} style={styles.carsImages} />
-                  </View>
-                  <View style={styles.introCars}>
-                    <View style={styles.buildYear}>
-                      {/* <Animated.Text  style={{fontWeight:'800',fontSize:40,color:'#eee',paddingTop: paddingTop || 1,
+              // onScroll={this.onScroller.bind(this)}
+
+              onScroll={({ nativeEvent }) => {
+                // Animated.timing(this.state.upOpacity,{toValue:0,duration:50,useNativeDriver:true}).start()
+                this.setState({ scrollX: nativeEvent.contentOffset.x }, () => {
+                  this.UpAndFade();
+                });
+
+                // this.setState({ scrollX: nativeEvent.contentOffset.x }, () => {
+                //   this.logger(console.warn('first one'));
+                // });
+
+              }}
+              // onScroll={ Animated.event([({ nativeEvent }) => {
+              //   this.setState({ scrollX: nativeEvent.contentOffset.x });
+              // },])     }
+
+              // onScroll={Animated.event([
+              //   (({ nativeEvent }) => {
+              //       this.setState({ scrollX: nativeEvent.contentOffset.x });
+              //     })])}
+
+              keyExtractor={item => item.key}
+              renderItem={({ item }) => {
+                return (
+                  <Animated.View key={item} style={styles.flatlistPage}>
+                    <View style={styles.pageHeader}>
+                      {/* {this.state.showHeader && (
+                        <Text
+                          style={{
+                            color: "#fff",
+                            fontSize: 18,
+                            fontWeight: "600"
+                          }}
+                        >
+                          Timeline
+                        </Text>
+                      )} */}
+                    </View>
+                    <View style={styles.imageWrapper}>
+                      <Image source={item.image} style={styles.carsImages} />
+                    </View>
+                    <View style={styles.introCars}>
+                      <View style={styles.buildYear}>
+                        {/* <Animated.Text  style={{fontWeight:'800',fontSize:40,color:'#eee',paddingTop: paddingTop || 1,
               opacity: this.state.upOpacity,}}>{item.startyear} - </Animated.Text>
                       <Animated.Text  style={{fontWeight:'800',fontSize:40,color:'#888',paddingTop: paddingTop || 1,
               opacity: this.state.upOpacity,}}>{item.endyear}</Animated.Text>
                */}
 
-                      {/* {Data.map((_, i) => {
+                        {/* {Data.map((_, i) => {
                           let opacity = position.interpolate({
                             inputRange: [i - 1, i, i + 1],
                             outputRange: [0.5, 1, 0.5],
@@ -159,107 +355,110 @@ export default class Corvettes extends Component {
                           );
                         })} */}
 
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          borderColor: "red",
-                          borderWidth: 3,
-                          height: 75
-                        }}
-                      >
-                        {Data.map((cars, i) => {
-                          const opacity = position.interpolate({
-                            inputRange: [i - 1, i, i + 1],
-                            outputRange: [0.3, 1, 0],
-                            extrapolate: "extend"
-                          });
-                          const fontSizer = position.interpolate({
-                            inputRange: [i - 1, i, i + 1],
-                            outputRange: [25, 50, 25]
-                          });
-                          const topPadder = position.interpolate({
-                            inputRange: [i - 1, i, i + 1],
-                            outputRange: [0, 10, 0]
-                          });
-
-                          return (
-                            <Animated.View
-                              key={i}
-                              style={{
-                                opacity,
-                                justifyContent: "center",
-                                alignItems: "center",
-                                borderRadius: 50,
-                                transform: [{ scaleY: 1.25 }]
-                              }}
-                            >
-                              <Animated.Text
-                                style={{
-                                  opacity: this.state.upOpacity,
-                                  color: "#fff",
-                                  fontSize: fontSizer,
-                                  fontWeight: "800",
-                                  fontFamily: "monospace",
-                                  paddingTop: topPadder || 1,
-                                  marginTop: marginToper,
-                                  marginRight: marginRighter,
-                                  fontFamily: "serif"
-                                }}
-                              >
-                                {cars.startyear}{" "}
-                              </Animated.Text>
-                            </Animated.View>
-                          );
-                        })}
-                      </View>
-                      <View style={styles.mainInfo}>
-                        <Animated.View style={styles.pagerCount}>
-                          {Data.map((item, i) => {
-                            const opacityRR = position.interpolate({
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            borderColor: "red",
+                            borderWidth: 3,
+                            height: 75
+                          }}
+                        >
+                          {Data.map((cars, i) => {
+                            const opacity = position.interpolate({
                               inputRange: [i - 1, i, i + 1],
-                              outputRange: [0.5, 1, 0.5],
-                              extrapolate: "clamp"
+                              outputRange: [0.3, 1, 0],
+                              extrapolate: "extend"
+                              // duration: 400
                             });
+                            const fontSizer = position.interpolate({
+                              inputRange: [i - 1, i, i + 1],
+                              outputRange: [25, 50, 25]
+                            });
+                            const topPadder = position.interpolate({
+                              inputRange: [i - 1, i, i + 1],
+                              outputRange: [10, 20, 0]
+                            });
+
                             return (
                               <Animated.View
                                 key={i}
                                 style={{
-                                  borderColor: "gold",
-                                  borderWidth: 3,
-                                  // opacity: this.state.upOpacity,
-                                  opacity: opacityRR,
-                                  padding: 5,
-                                  justifyContent: "space-evenly",
-                                  alignItems: "center"
+                                  opacity,
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  borderRadius: 50,
+                                  transform: [{ scaleY: 1.25 }]
                                 }}
                               >
                                 <Animated.Text
                                   style={{
-                                    color: "#eee",
-                                    transform: [{ scaleY: 1.3 }],
-                                    fontSize: 16
+                                    opacity: opacity,
+                                    color: "#fff",
+                                    // fontSize: fontSizer,
+                                    fontWeight: "800",
+                                    fontFamily: "monospace",
+                                    // paddingTop: topPadder || 1,
+                                    // trensform: this.state.upMove,
+                                    // transform: [{ translateY: topPadder }],
+                                    // marginRight: marginRighter,
+                                    fontFamily: "serif"
                                   }}
                                 >
-                                  {item.key}
+                                  {cars.startyear}{" "}
                                 </Animated.Text>
-                                <Animated.View
-                                  style={{
-                                    width: 5,
-                                    height: 5,
-                                    borderRadius: 50,
-                                    backgroundColor: "#fff"
-                                  }}
-                                />
                               </Animated.View>
                             );
                           })}
-                        </Animated.View>
+                        </View>
+                        <View style={styles.mainInfo}>
+                          <Animated.View style={styles.pagerCount}>
+                            {Data.map((item, i) => {
+                              const opacityRR = position.interpolate({
+                                inputRange: [i - 1, i, i + 1],
+                                outputRange: [0.5, 1, 0.5],
+                                extrapolate: "clamp"
+                              });
+                              return (
+                                <Animated.View
+                                  key={i}
+                                  style={{
+                                    borderColor: "gold",
+                                    borderWidth: 3,
+                                    // opacity: this.state.upOpacity,
+                                    opacity: opacityRR,
+                                    padding: 5,
+                                    justifyContent: "space-evenly",
+                                    alignItems: "center"
+                                  }}
+                                >
+                                  <Animated.Text
+                                    style={{
+                                      color: "#eee",
+                                      transform: [{ scaleY: 1.3 }],
+                                      fontSize: 16
+                                    }}
+                                  >
+                                    {item.key}
+                                  </Animated.Text>
+                                  <Animated.View
+                                    style={{
+                                      width: 5,
+                                      height: 5,
+                                      borderRadius: 50,
+                                      backgroundColor: "#fff"
+                                    }}
+                                  />
+                                </Animated.View>
+                              );
+                            })}
+                          </Animated.View>
 
-                        <Animated.View
+                          <Animated.View
                           style={[
                             styles.carName,
                             {
-                              paddingBottom: marginToper,
+                              // paddingBottom: marginToper,
+                              transform:[{translateX:this.state.Xtransform}],
                               opacity: this.state.upOpacity
                             }
                           ]}
@@ -271,35 +470,72 @@ export default class Corvettes extends Component {
                             {item.name}
                           </Animated.Text>
                         </Animated.View>
-                        <View style={styles.descriptionPart}>
-                          <View style={styles.productionView}>
-                            <Text style={styles.ProductHistory}>
-                              Production
-                            </Text>
-                            <Text style={styles.ProductHistory}>
-                              {item.startyear} - {item.endyear}
-                            </Text>
-                          </View>
-                          <View style={styles.decsiptionView}>
-                          <Text style={{borderWidth:2,borderColor:'dodgerblue'}}>{item.description}</Text>
+                          <View style={styles.descriptionPart}>
+                            <View style={styles.productionView}>
+                              <Text style={styles.ProductHistory}>
+                                Production
+                              </Text>
+                              <Text style={styles.ProductHistory}>
+                                {item.startyear} - {item.endyear}
+                              </Text>
+                            </View>
+                            <View style={styles.decsiptionView}>
+                              <Text
+                                style={{
+                                  borderWidth: 2,
+                                  borderColor: "dodgerblue"
+                                }}
+                              >
+                                {item.description}
+                              </Text>
+                            </View>
                           </View>
                         </View>
                       </View>
                     </View>
-                  </View>
-                  <View
-                    style={{
-                      width: 150,
-                      height: 150,
-                      backgroundColor: "#fff",
-                      zIndex: 3
-                    }}
-                  />
-                </Animated.View>
-              );
-            }}
-          />
-        </Animated.View>
+                    <View
+                      style={{
+                        width: 150,
+                        height: 150,
+                        backgroundColor: "#fff",
+                        zIndex: 3
+                      }}
+                    />
+                  </Animated.View>
+                );
+              }}
+            />
+          </Animated.View>
+          <Animated.View>
+            <Animated.View
+              style={{
+                borderColor: "gold",
+                borderWidth: 4,
+                borderRadius: 6,
+                width: deviceWidth,
+                height: deviceHeight,
+                backgroundColor: "#333",
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <Animated.View
+                style={{
+                  borderColor: "dodgerblue",
+                  borderWidth: 4,
+                  borderRadius: 6,
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <Image
+                  source={require("../Assets/Images/chevrolet.png")}
+                  style={{ width: 300, height: 200 }}
+                />
+              </Animated.View>
+            </Animated.View>
+          </Animated.View>
+        {/* </ScrollView> */}
       </View>
     );
   }
@@ -387,27 +623,27 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     height: 65,
     justifyContent: "center",
-    flexDirection:'row',
+    flexDirection: "row"
     // flex:1
   },
   ProductHistory: {
     fontSize: 14,
     color: "#eee",
-    borderColor:'red',
-    borderWidth:3
+    borderColor: "red",
+    borderWidth: 3
   },
   productionView: {
     backgroundColor: "purple",
-    borderWidth:3,
-    flex:1
+    borderWidth: 3,
+    flex: 1
   },
-  decsiptionView:{
-    backgroundColor:'gold',
-    borderWidth:3,
-    flex:1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    flexDirection:"row"
+  decsiptionView: {
+    backgroundColor: "gold",
+    borderWidth: 3,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    flexWrap: "wrap",
+    flexDirection: "row"
   }
 });

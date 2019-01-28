@@ -8,7 +8,7 @@ export default Data = [
             class:'sport car',
             image:require('../Assets/Images/corvetteRed.png'),
             key:'1',
-            description:' Chevrolet Corvette C3 was produced by Chevrolet for the 60s '
+            // description:' Chevrolet Corvette C3 was produced by Chevrolet for the 60s '
 
     },
     {
@@ -19,7 +19,7 @@ export default Data = [
         class:'sport car',
         image:require('../Assets/Images/corvetteRed2.png'),
         key:'2',
-        description:' It set new sales records with 53,807 produced for the 1979 model year'
+        // description:' It set new sales records with 53,807 produced for the 1979 model year'
 
 },
 {
@@ -30,7 +30,7 @@ export default Data = [
     class:'sport car',
     image:require('../Assets/Images/corvetteBlue.png'),
     key:'3',
-    description:'The C4 model was an succesful upgrade to the previous generation'
+    // description:'The C4 model was an succesful upgrade to the previous generation'
 
 },
 {
@@ -41,7 +41,7 @@ export default Data = [
     class:'sport car',
     image:require('../Assets/Images/corvetteBlue2.png'),
     key:'4',
-    description:' The convertible returned, and did higher performance '
+    // description:' The convertible returned, and did higher performance '
 
 },
 ]
