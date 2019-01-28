@@ -10,12 +10,14 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View,FlatList} from 'react-native';
 import Corvettes from './src/Components/Corvettes'
-
+import Soldiers from './src/Components/Soldiers'
 export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
       <Corvettes/>
+      {/* <Soldier/> */}
+      {/* <Soldiers/> */}
       </View>
     );
   }
