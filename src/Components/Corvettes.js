@@ -24,7 +24,10 @@ export default class Corvettes extends Component {
       upMove: new Animated.Value(0),
       upOpacity: new Animated.Value(0),
       Xtransform: new Animated.Value(0),
-      isShowingName: true
+      isShowingName: true,
+      ScrollState:0,
+      ScrollNow:0,
+     myopacity: new Animated.Value(0)
     };
   }
 
@@ -71,16 +74,12 @@ export default class Corvettes extends Component {
   //   Animated.timing(this.state.upOpacity, { toValue: 0.0, duration:25,useNativeDriver:true }).start()
   // }
   UpAndFade() {
-    this.setState({isShowingName:true})
-    // this.state.upOpacity.setValue(0);
+    // this.setState({isShowingName:true})
+    this.state.upOpacity.setValue(0);
     // this.state.upMove.setValue(0);
     // this.state.Xtransform.setValue(0)
     Animated.sequence([
-      Animated.timing(this.state.upOpacity, {
-        toValue: 0,
-        duration: 100,
-        useNativeDriver: true
-      }),
+      
       Animated.timing(this.state.Xtransform, {
         toValue: 0,
         duration: 50,
@@ -106,6 +105,7 @@ export default class Corvettes extends Component {
         })
       ])
     ]).start();
+    this.setState({isShowingName:true})
   }
 
   // configlayouts = {
@@ -145,8 +145,12 @@ export default class Corvettes extends Component {
   //   setInterval(console.warn('second'),2000)
   // }
 
+
+  fadeIn=()=>{
+    Animated.timing(this.state.myopacity,{toValue:1,duration:500,useNativeDriver:true}).start()
+  }
   componentDidMount() {
-    this.UpAndFade();
+    this.fadeIn();
   }
 
   render() {
@@ -185,6 +189,18 @@ export default class Corvettes extends Component {
       outputRange: [0.3, 1, 0],
       extrapolate: "extend"
     });
+
+// Data.map(()=>{return()})
+//     const opacityY = position.interpolate({
+//       inputRange:[index-1,index,index+1],
+//       outputRange:[0.5,1,0.5],
+//       extrapolate:'clamp'
+//     }),
+
+let D = new Date(500)
+
+
+let {getopacity} = this.state.upOpacity
 
     return (
       <View style={styles.container}>
@@ -297,12 +313,67 @@ export default class Corvettes extends Component {
             // onScroll={Animated.event([({ nativeEvent }) => {this.setState({ scrollX: nativeEvent.contentOffset.x }); } ,console.warn('hello') ])(event)}
 
             // onScroll={this.onScroller.bind(this)}
-
+            // onMomentumScrollBegin={console.warn('hello')}
             onScroll={({ nativeEvent }) => {
-              Animated.timing(this.state.upOpacity,{toValue:0,duration:50,useNativeDriver:true}).start()
-              this.setState({ scrollX: nativeEvent.contentOffset.x ,isShowingName:false}),
-                this.UpAndFade();
-            ;
+              // var dd = new Date
+              // var n = dd.getMilliseconds();
+              // console.warn(n)
+              // var gg
+              // var ddd = setTimeout(()=>{gg = Math.floor(nativeEvent.contentOffset.x);console.warn(`this is later${Math.floor(nativeEvent.contentOffset.x)}`)},50)
+              // // var ddd = setTimeout(()=>{this.calpos},50)
+              // console.warn(`this is gg : ${gg}`)
+              // // this.calpos
+              // let aa = 0
+                
+
+                
+              this.setState({ scrollX: nativeEvent.contentOffset.x }, )
+
+              let aa = nativeEvent.contentOffset.x
+              // var dd =Math.floor(nativeEvent.contentOffset.x) 
+              //   console.warn(`this is now ${dd}:`)
+              console.warn(` this is scrollX ${this.state.scrollX}  == this is previous ${aa}`)
+if(this.state.scrollX === aa){console.warn(`${this.state.scrollX}  == ${aa}`)}
+
+
+
+              this.setState({ScrollNow:Math.floor(nativeEvent.contentOffset.x)})
+                // console.warn(`this is now ${dd} : this is later ${ddd}`)
+                // console.warn(`this is now ${this.state.ScrollNow}`)
+
+                setTimeout(()=>{this.setState({ScrollState:Math.floor(nativeEvent.contentOffset.x)})},1500)
+              //  console.warn(`this is cc ${this.state.ScrollState}`)
+                if(this.state.ScrollState === this.state.ScrollNow){
+                  console.warn(` true ${this.state.ScrollState} === ${this.state.ScrollNow}`)
+                  this.setState({isShowingName:true},()=>{this.fadeIn()})
+                }else{
+                  // this.state.myopacity.setValue(0)
+                  this.setState({isShowingName:false})
+                  console.warn(` false ${this.state.ScrollState} === ${this.state.ScrollNow}`)
+
+                }
+               
+              //   calpos=()=>{
+              // setTimeout(()=>{console.warn(`this is later${Math.floor(nativeEvent.contentOffset.x)}`)},500)
+                  // if(dd === ){console.warn('hello')}
+              //   }
+              // var nw = Date.now();
+             
+              // if(true){console.warn(`${nativeEvent.contentOffset.x}  ,  ${dd}`)}
+              // if(nativeEvent.contentOffset.x.onchange){console.warn(nativeEvent.contentOffset.x)}
+              // if(nativeEvent.contentOffset.x.onChange){setTimeout(()=>console.warn('stoped'),500)}
+              // console.warn(nativeEvent.contentOffset.x)
+              // var isChangedScroll = nativeEvent.contentOffset.x;
+              // if(nativeEvent === isChangedScroll){alert('hello changed')}
+
+
+
+              // this.setState({isShowingName:false})
+              
+              // Animated.timing(this.state.upOpacity,{toValue:0,duration:50,useNativeDriver:true}).start()
+              
+               
+            
             // Animated.event([
             //   { nativeEvent: { contentOffset: { x: this.state.scrollX } } }
             
@@ -382,7 +453,7 @@ export default class Corvettes extends Component {
                         }}
                       >
                         {Data.map((cars, i) => {
-                          const opacity = position.interpolate({
+                          const opacityX = position.interpolate({
                             inputRange: [i - 1, i, i + 1],
                             outputRange: [0.3, 1, 0],
                             extrapolate: "extend"
@@ -401,7 +472,7 @@ export default class Corvettes extends Component {
                             <Animated.View
                               key={i}
                               style={{
-                                opacity,
+                                opacityX,
                                 justifyContent: "center",
                                 alignItems: "center",
                                 borderRadius: 50,
@@ -410,7 +481,7 @@ export default class Corvettes extends Component {
                             >
                               <Animated.Text
                                 style={{
-                                  opacity: opacity,
+                                  opacity: opacityX,
                                   color: "#fff",
                                   // fontSize: fontSizer,
                                   fontWeight: "800",
@@ -470,20 +541,13 @@ export default class Corvettes extends Component {
                             );
                           })}
                         </Animated.View>
-<View style={{flexDirection: 'row',}}>
-                      {Data.map((txt,indx)=>{
-                        const opacity = position.interpolate({
-                          inputRange: [indx - .1, indx, indx + .1],
-                          outputRange: [0.5, 1, 0.5],
-                          extrapolate: "clamp"
-                        });
-                        const fontSizer = position.interpolate({
-                          inputRange: [indx - 1, indx, indx + 1],
-                          outputRange: [0, 40, 0],
 
-                        })
-                        
-                        return(<Animated.View
+        
+
+<View style={{flexDirection: 'row',}}>
+
+
+                     {this.state.isShowingName && <Animated.View
                           style={[
                             styles.carName,
                            
@@ -491,7 +555,15 @@ export default class Corvettes extends Component {
                             {
                               // paddingBottom: marginToper,
                              
-                              opacity:opacity,
+                              
+                               opacity :position.interpolate({
+                                inputRange:[index-1,index,index+1],
+                                useNativeDriver:true,
+                                outputRange:[0,1,0],
+                                duration:5000,
+                                extrapolate:'clamp'
+                               }),
+                              // opacity:this.state.myopacity,
                               height:100,
                               
                               // transform:[{translateX:this.state.Xtransform}],
@@ -500,12 +572,12 @@ export default class Corvettes extends Component {
                           ]}
                         >
                           <Animated.Text style={[styles.nameTxt,{ color:'#fff',fontSize:12}]}>
-                            {txt.build}
+                            {item.build}
                           </Animated.Text>
                           <Animated.Text style={[styles.nameTxt,{ color:'#fff',fontSize:12}]}>
-                            {txt.name}
+                            {item.name}
                           </Animated.Text>
-                        </Animated.View> )})} 
+                        </Animated.View>}
                         </View>
                         {/* {console.warn(`this is posindex ${positionIndex}`)}
                         {console.warn(`this is index ${index}`)} */}
